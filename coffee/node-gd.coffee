@@ -40,12 +40,16 @@ save_func = (format, len) ->
 
 util = require 'util'
 fs = require 'fs'
+platform_full = process.platform + '-' + process.arch
 
 # not sure what dif. is between Release and default
 # but its not consistent across node installations
 if fs.existsSync(lib = __dirname+'/../build/Release/node-gd.node')
   gd_bindings = require lib
 else if fs.existsSync(lib = __dirname+'/../build/default/node-gd.node')
+  gd_bindings = require lib
+else if fs.existsSync(lib = __dirname+ '/../precompiled/'+platform_full+'/node-gd.node')
+  # default to a precompiled binary if no build exists
   gd_bindings = require lib
 else
   throw 'unable to locate node-gd.node within build directory'
